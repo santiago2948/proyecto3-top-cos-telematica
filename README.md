@@ -171,7 +171,7 @@ Se puede visualizar en: http://34.205.142.167:8501
 cd view
 nohup streamlit run app.py --server.port=8501 > output.log 2>&1 &
 ```
-Accede en: `http://<IP_publica>:8501`
+Accede en: (http://34.205.142.167:8501)
 
 ---
 
