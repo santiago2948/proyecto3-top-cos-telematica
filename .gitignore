@@ -1,0 +1,7 @@
+aws
+my_env
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+*.zip
