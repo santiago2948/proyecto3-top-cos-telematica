@@ -103,5 +103,90 @@ sudo docker-compose up -d
 sudo docker exec -i mysql_weather mysql -uadmin -padmin123 -D weather_data < weather_london_schema.sql
 ```
 
+### Configurar variables de entorno
+
+1. Copia `.env.example` a `.env` y completa los valores:
+    ```
+    BUCKET=<nombre_bucket_s3>
+    BD_USER=<usuario_mysql>
+    BD_PASSWORD=<password_mysql>
+    BD_HOST=<host_mysql>
+    ```
+
+2. Crea el bucket S3 y sube la carpeta `emr-steps` al bucket.
+
+---
+
+## 5. Carga inicial y procesos automáticos
+
+### Carga inicial de datos (últimos 7 días)
+
+```bash
+python3 -m venv my_env
+source my_env/bin/activate
+pip install -r requirements.txt
+python export_from_api_to_s3.py
+python load_london_to_sql.py
+python export_sql_to_s3.py
+```
+
+### Permisos de scripts
+
+```bash
+chmod +x lanzar_emr.sh
+chmod +x carga_datos_london.sh
+chmod +x carga_datos_medellin.sh
+```
+
+### Programar tareas automáticas con cron
+
+```bash
+crontab -e
+```
+Agrega al final:
+```
+0 0 * * * /home/ubuntu/workarea/cargar_datos_diario_medellin.py >> /home/ubuntu/workarea/log_medellin.txt 2>&1
+5 0 * * * /home/ubuntu/workarea/carga_datos_london.sh >> /home/ubuntu/workarea/log_london.txt 2>&1
+0 */4 * * * /home/ubuntu/workarea/lanzar_emr.sh >> /home/ubuntu/workarea/log_emr.txt 2>&1
+```
+
+---
+
+## 6. Procesamiento y análisis en EMR
+
+- El script `lanzar_emr.sh` crea el clúster EMR y ejecuta los steps de ETL y análisis automáticamente.
+- Los scripts Spark (`emr-steps/etl_clima.py` y `emr-steps/analisis_clima.py`) procesan los datos y los almacenan en S3 en las zonas `trusted` y `refined`.
+
+---
+
+## 7. Visualización de resultados
+
+La aplicación web en Streamlit permite visualizar los datos refinados y estadísticas.
+
+Se puede visualizar en: http://34.205.142.167:8501
+
+### Ejecución:
+
+```bash
+cd view
+nohup streamlit run app.py --server.port=8501 > output.log 2>&1 &
+```
+Accede en: `http://<IP_publica>:8501`
+
+---
+
+---
+
+## 9. Referencias
+
+- [Open-Meteo API](https://open-meteo.com/)
+- [AWS EMR](https://docs.aws.amazon.com/emr/)
+- [AWS S3](https://docs.aws.amazon.com/s3/)
+- [Streamlit](https://streamlit.io/)
+- [Pandas](https://pandas.pydata.org/)
+- [PySpark](https://spark.apache.org/docs/latest/api/python/)
+- [Universidad EAFIT](https://www.eafit.edu.co/)
+
+---
 
 
