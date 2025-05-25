@@ -1,7 +1,11 @@
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, when, avg, round as pyspark_round
+from dotenv import load_dotenv
+import os
 
-spark = SparkSession.builder.appName("Analisis Descriptivo").getOrCreate()
+load_dotenv(dotenv_path='../.env')  
+
+bucket = os.getenv("BUCKET")
 
 bucket = "mi-bucket-meteo-2025"
 df = spark.read.parquet(f"s3://{bucket}/trusted/clima_etl/")

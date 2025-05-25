@@ -2,9 +2,19 @@ import pandas as pd
 from sqlalchemy import create_engine
 import boto3
 import io
+from dotenv import load_dotenv
+import os
+
+load_dotenv(dotenv_path='../.env')  
+
+# Configuración S3
+
+db_user = os.getenv("DB_USER")
+db_password = os.getenv("DB_PASSWORD")
+db_host = os.getenv("DB_HOST")
 
 # Configuración de la base de datos
-engine = create_engine('mysql+pymysql://admin:admin123@localhost:3306/weather_data')
+engine = create_engine(f'mysql+pymysql://{db_user}:{db_password}@{db_host}:3306/weather_data')
 
 # Leer los datos de la tabla
 query = 'SELECT * FROM weather_london'
@@ -14,7 +24,7 @@ df = pd.read_sql(query, con=engine)
 s3 = boto3.client('s3')
 
 # Nombre del bucket y carpeta en S3
-bucket_name = 'mi-bucket-meteo-2025'
+bucket_name =  os.getenv("BUCKET")
 prefix = 'raw/londres/'
 
 # Exportar por fecha y subir a S3

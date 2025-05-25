@@ -4,14 +4,23 @@ import requests_cache
 from retry_requests import retry
 import sqlalchemy
 from sqlalchemy import create_engine
-import datetime
+from dotenv import load_dotenv
+import os
+
+load_dotenv(dotenv_path='../.env')  
+
+# Configuración S3
+
+db_user = os.getenv("DB_USER")
+db_password = os.getenv("DB_PASSWORD")
+db_host = os.getenv("DB_HOST")
 
 # Configura la latitud y longitud para Londres
 latitude = 51.5074
 longitude = -0.1278
 
 # Configura la conexión a tu base de datos MySQL (ajusta usuario, contraseña, host, puerto y base de datos)
-engine = create_engine('mysql+pymysql://admin:admin123@localhost:3306/weather_data')
+engine = create_engine(f'mysql+pymysql://{db_user}:{db_password}@{db_host}:3306/weather_data')
 
 # Setup the Open-Meteo API client with cache and retry on error
 cache_session = requests_cache.CachedSession('.cache', expire_after=3600)
@@ -31,7 +40,7 @@ params = {
 
 # Calcula el rango de fechas: últimos 7 días hasta hoy
 end_date = pd.Timestamp.utcnow().floor('D') - pd.Timedelta(days=1)
-start_date = end_date - pd.Timedelta(days=8)
+start_date = end_date - pd.Timedelta(days=6)
 
 # Formatea las fechas para la API (YYYY-MM-DD)
 start_date_str = start_date.strftime('%Y-%m-%d')

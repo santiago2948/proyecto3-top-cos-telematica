@@ -1,12 +1,16 @@
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import to_date, lit
-from datetime import date, timedelta
+from dotenv import load_dotenv
+import os
+
+load_dotenv(dotenv_path='../.env')  
+
 
 # Crear SparkSession
 spark = SparkSession.builder.appName("ETL Clima").getOrCreate()
 
 # -------- CONFIGURACIÓN --------
-bucket = "mi-bucket-meteo-2025"
+bucket = os.getenv("BUCKET")
 zona_raw_medellin = f"s3://{bucket}/raw/medellin/"
 zona_raw_londres = f"s3://{bucket}/raw/londres/"
 zona_trusted = f"s3://{bucket}/trusted/clima_etl/"

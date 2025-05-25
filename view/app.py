@@ -2,9 +2,14 @@ import streamlit as st
 import pandas as pd
 import boto3
 import io
+from dotenv import load_dotenv
+import os
+
+load_dotenv(dotenv_path='../.env')  
+
 
 # Configura tu bucket y clave
-BUCKET = "mi-bucket-meteo-2025"
+BUCKET = os.getenv("BUCKET")
 PREFIX = "refined/analisis/"
 
 # Cargar último archivo Parquet desde S3

@@ -7,7 +7,11 @@ import boto3
 import io
 import sqlalchemy
 from sqlalchemy import create_engine
+from dotenv import load_dotenv
 import os
+
+load_dotenv(dotenv_path='../.env')  
+
 
 # Calcular la fecha del día anterior
 fecha = date.today() - timedelta(days=1)
@@ -72,7 +76,7 @@ df.to_csv(csv_buffer, index=False)
 csv_buffer.seek(0)
 
 s3 = boto3.client('s3')
-bucket_name = "mi-bucket-meteo-2025"
+bucket_name = os.getenv("BUCKET")
 s3_key = f"raw/medellin/weather_{fecha_str}.csv"
 
 s3.upload_fileobj(csv_buffer, bucket_name, s3_key)

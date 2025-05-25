@@ -3,14 +3,20 @@ from sqlalchemy import create_engine
 import boto3
 import io
 from datetime import timedelta, date
+from dotenv import load_dotenv
 import os
 
+load_dotenv(dotenv_path='../.env')  
+
+db_user = os.getenv("DB_USER")
+db_password = os.getenv("DB_PASSWORD")
+db_host = os.getenv("DB_HOST")
 # Calcular la fecha del día anterior
 fecha = date.today() - timedelta(days=1)
 fecha_str = fecha.isoformat()
 
 # Configuración de la base de datos
-engine = create_engine('mysql+pymysql://admin:admin123@localhost:3306/weather_data')
+engine = create_engine(f'mysql+pymysql://{db_user}:{db_password}@{db_host}:3306/weather_data')
 
 # Leer los datos de weather_london del día anterior
 query = f"SELECT * FROM weather_london WHERE DATE(date) = '{fecha_str}'"

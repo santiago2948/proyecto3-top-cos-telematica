@@ -5,9 +5,13 @@ from retry_requests import retry
 from datetime import timedelta, date
 import boto3
 import io
+from dotenv import load_dotenv
+import os
+
+load_dotenv(dotenv_path='../.env')  
 
 # Configuración S3
-bucket_name = "mi-bucket-meteo-2025"
+bucket_name = os.getenv("BUCKET")
 prefix = "raw/medellin/"
 
 s3 = boto3.client('s3')
