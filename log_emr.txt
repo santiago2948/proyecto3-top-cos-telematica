@@ -1,0 +1,8 @@
+{
+    "ClusterId": "j-39P65VK1ERCZJ",
+    "ClusterArn": "arn:aws:elasticmapreduce:us-east-1:841584779853:cluster/j-39P65VK1ERCZJ"
+}
+{
+    "ClusterId": "j-17BBQSQJES02R",
+    "ClusterArn": "arn:aws:elasticmapreduce:us-east-1:841584779853:cluster/j-17BBQSQJES02R"
+}

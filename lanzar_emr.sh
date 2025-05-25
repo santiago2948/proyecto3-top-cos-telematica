@@ -21,13 +21,13 @@ aws emr create-cluster \
       \"Type\": \"Spark\",
       \"Name\": \"ETL Clima\",
       \"ActionOnFailure\": \"CONTINUE\",
-      \"Args\": [\"spark-submit\", \"--deploy-mode\", \"cluster\", \"$SCRIPT_ETL\"]
+      \"Args\": [\"--deploy-mode\", \"cluster\", \"$SCRIPT_ETL\"]
     },
     {
       \"Type\": \"Spark\",
       \"Name\": \"Análisis Clima\",
       \"ActionOnFailure\": \"CONTINUE\",
-      \"Args\": [\"spark-submit\", \"--deploy-mode\", \"cluster\", \"$SCRIPT_ANALISIS\"]
+      \"Args\": [\"--deploy-mode\", \"cluster\", \"$SCRIPT_ANALISIS\"]
     }
   ]" \
   --auto-terminate
