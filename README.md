@@ -66,3 +66,42 @@ Este proyecto implementa una arquitectura batch automatizada para la captura, in
 ├── weather_london_schema.sql
 └── .env.example
 ```
+
+---
+
+## 4. Requisitos y preparación del entorno
+
+- Ubuntu 22.04 (EC2)
+- Docker y Docker Compose
+- Python 3.10+ y venv
+- AWS CLI
+- Acceso a AWS S3 y EMR (rol IAM: LabInstanceProfile)
+
+### Instalación de dependencias
+
+```bash
+sudo apt update
+sudo apt install docker.io docker-compose python3 python3-venv python3-pip unzip -y
+sudo systemctl enable docker
+sudo systemctl start docker
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install
+```
+
+### Clonar el repositorio
+
+```bash
+git clone https://github.com/santiago2948/proyecto3-top-cos-telematica.git
+cd proyecto3-top-cos-telematica
+```
+
+### Configurar base de datos MySQL
+
+```bash
+sudo docker-compose up -d
+sudo docker exec -i mysql_weather mysql -uadmin -padmin123 -D weather_data < weather_london_schema.sql
+```
+
+
+
